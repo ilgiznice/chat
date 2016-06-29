@@ -30,11 +30,13 @@ let data = [
     }
 ];
 
-let contacts = data.map((contact) => ({
-    id: contact.id,
-    subject: contact.subject,
-    created: contact.created
-}));
+let contacts = () => {
+    return data.map((contact) => ({
+        id: contact.id,
+        subject: contact.subject,
+        created: contact.created
+    }));
+};
 
 let messages = (id = null) => {
     if (!id) {
@@ -56,6 +58,7 @@ let Main = React.createClass({
 
     getInitialState: function() {
         return {
+            contacts: contacts(),
             messages: messages(),
             id: null,
             disabled: true
@@ -84,6 +87,12 @@ let Main = React.createClass({
                 author: message.author,
                 text: message.text
             });
+        let now = new Date();
+        let lastMessageDate = now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate() + ' ' + now.getHours() + ':' + now.getMinutes();
+        data.filter((chat) => chat.id == id)[0].created = lastMessageDate;
+        this.setState({
+            contacts: contacts()
+        });
         this.updateChat(id);
     },
 
@@ -106,7 +115,7 @@ let Main = React.createClass({
         return (
             <div>
                 <Contacts
-                    contacts = {contacts}
+                    contacts = {this.state.contacts}
                     onUpdateChat={this.updateChat}
                 />
                 <Chat

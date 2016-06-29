@@ -50,7 +50,7 @@
 
 	var _contacts2 = _interopRequireDefault(_contacts);
 
-	var _chat = __webpack_require__(2);
+	var _chat = __webpack_require__(3);
 
 	var _chat2 = _interopRequireDefault(_chat);
 
@@ -76,13 +76,15 @@
 	    parts: [{ id: 1, author: 'petr', text: 'Здравствуйте, тут есть кто-нибудь?' }, { id: 2, author: 'vasiliy', text: 'Да, я вас слушаю!' }]
 	}];
 
-	var contacts = data.map(function (contact) {
-	    return {
-	        id: contact.id,
-	        subject: contact.subject,
-	        created: contact.created
-	    };
-	});
+	var contacts = function contacts() {
+	    return data.map(function (contact) {
+	        return {
+	            id: contact.id,
+	            subject: contact.subject,
+	            created: contact.created
+	        };
+	    });
+	};
 
 	var messages = function messages() {
 	    var id = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
@@ -110,6 +112,7 @@
 
 	    getInitialState: function getInitialState() {
 	        return {
+	            contacts: contacts(),
 	            messages: messages(),
 	            id: null,
 	            disabled: true
@@ -141,6 +144,14 @@
 	            author: message.author,
 	            text: message.text
 	        });
+	        var now = new Date();
+	        var lastMessageDate = now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate() + ' ' + now.getHours() + ':' + now.getMinutes();
+	        data.filter(function (chat) {
+	            return chat.id == id;
+	        })[0].created = lastMessageDate;
+	        this.setState({
+	            contacts: contacts()
+	        });
 	        this.updateChat(id);
 	    },
 
@@ -166,7 +177,7 @@
 	            'div',
 	            null,
 	            React.createElement(_contacts2.default, {
-	                contacts: contacts,
+	                contacts: this.state.contacts,
 	                onUpdateChat: this.updateChat
 	            }),
 	            React.createElement(_chat2.default, {
@@ -191,7 +202,7 @@
 	    value: true
 	});
 
-	var _contact = __webpack_require__(3);
+	var _contact = __webpack_require__(2);
 
 	var _contact2 = _interopRequireDefault(_contact);
 
@@ -230,6 +241,43 @@
 
 /***/ },
 /* 2 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var Contact = React.createClass({
+	    displayName: "Contact",
+
+
+	    selectChat: function selectChat() {
+	        this.props.onChatSelected(this.props.id);
+	    },
+
+	    render: function render() {
+	        return React.createElement(
+	            "div",
+	            { onClick: this.selectChat, className: "contacts-contact" },
+	            React.createElement(
+	                "p",
+	                null,
+	                this.props.created
+	            ),
+	            React.createElement(
+	                "p",
+	                null,
+	                this.props.subject
+	            )
+	        );
+	    }
+	});
+
+	exports.default = Contact;
+
+/***/ },
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -303,43 +351,6 @@
 	});
 
 	exports.default = Chat;
-
-/***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var Contact = React.createClass({
-	    displayName: "Contact",
-
-
-	    selectChat: function selectChat() {
-	        this.props.onChatSelected(this.props.id);
-	    },
-
-	    render: function render() {
-	        return React.createElement(
-	            "div",
-	            { onClick: this.selectChat, className: "contacts-contact" },
-	            React.createElement(
-	                "p",
-	                null,
-	                this.props.created
-	            ),
-	            React.createElement(
-	                "p",
-	                null,
-	                this.props.subject
-	            )
-	        );
-	    }
-	});
-
-	exports.default = Contact;
 
 /***/ },
 /* 4 */
