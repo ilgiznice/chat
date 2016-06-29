@@ -29,11 +29,6 @@ let Chat = React.createClass({
             return messages;
         };
 
-        //setTimeout(() => {
-        //    document.getElementsByClassName('loader')[0].style.display = 'none';
-        //    document.getElementsByClassName('chat-container')[0].style.opacity = 1;
-        //}, 3000);
-
         return(
             <div className="col-md-4 chat-container">
                 <div className="loader">
